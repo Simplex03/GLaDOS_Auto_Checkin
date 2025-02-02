@@ -1,0 +1,31 @@
+name: GLaDOS Auto Checkin
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # UTC时间8点（北京时间16点）
+  workflow_dispatch:
+
+jobs:
+  auto-checkin:
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Run checkin
+      env:
+        GLADOS_EMAIL: ${{ secrets.GLADOS_EMAIL }}
+        GLADOS_COOKIE: ${{ secrets.GLADOS_COOKIE }}
+        TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+        TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+      run: python glados_checkin.py
