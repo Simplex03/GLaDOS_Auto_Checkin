@@ -14,11 +14,12 @@ class GLaDOSChecker:
         self._validate_env()
         self.email = os.environ["GLADOS_EMAIL"]
         self.cookie = os.environ["GLADOS_COOKIE"]
-        self.bot_token = os.environ["TG_BOT_TOKEN"]
-        self.chat_id = os.environ["TG_CHAT_ID"]
+        # self.bot_token = os.environ["TG_BOT_TOKEN"]
+        # self.chat_id = os.environ["TG_CHAT_ID"]
         
     def _validate_env(self):
-        required = {"GLADOS_EMAIL", "GLADOS_COOKIE", "TG_BOT_TOKEN", "TG_CHAT_ID"}
+        # required = {"GLADOS_EMAIL", "GLADOS_COOKIE", "TG_BOT_TOKEN", "TG_CHAT_ID"}
+        required = {"GLADOS_EMAIL", "GLADOS_COOKIE"}
         missing = required - set(os.environ)
         if missing:
             raise ValueError(f"Missing environment variables: {', '.join(missing)}")
@@ -90,19 +91,19 @@ class GLaDOSChecker:
             "✅ 任务执行完成"
         )
         
-        try:
-            resp = requests.post(
-                f"https://api.telegram.org/bot{self.bot_token}/sendMessage",
-                json={
-                    "chat_id": self.chat_id,
-                    "text": message,
-                    "parse_mode": "Markdown"
-                },
-                timeout=10
-            )
-            resp.raise_for_status()
-        except Exception as e:
-            print(f"⚠️ 通知发送失败: {str(e)}")
+        # try:
+        #     resp = requests.post(
+        #         f"https://api.telegram.org/bot{self.bot_token}/sendMessage",
+        #         json={
+        #             "chat_id": self.chat_id,
+        #             "text": message,
+        #             "parse_mode": "Markdown"
+        #         },
+        #         timeout=10
+        #     )
+        #     resp.raise_for_status()
+        # except Exception as e:
+        #     print(f"⚠️ 通知发送失败: {str(e)}")
 
     def execute(self):
         print(f"🔍 开始处理账户: {self.email}")
